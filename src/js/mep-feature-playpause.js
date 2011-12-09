@@ -1,20 +1,21 @@
 (function($) {
 
-	$.extend(mejs.MepDefaults, {
+	Object.append(mejs.MepDefaults, {
 		playpauseText: 'Play/Pause'
 	});
 
 	// PLAY/pause BUTTON
-	$.extend(MediaElementPlayer.prototype, {
+	Object.append(MediaElementPlayer.prototype, {
 		buildplaypause: function(player, controls, layers, media) {
 			var 
 				t = this,
 				play = 
-				$('<div class="mejs-button mejs-playpause-button mejs-play" >' +
-					'<button type="button" aria-controls="' + t.id + '" title="' + t.options.playpauseText + '"></button>' +
-				'</div>')
-				.appendTo(controls)
-				.click(function(e) {
+				new Element('div', {
+					'class': 'mejs-button mejs-playpause-button mejs-play',
+					'html': '<button type="button" aria-controls="' + t.id + '" title="' + t.options.playpauseText + '"></button>'
+				})
+				.inject(controls)
+				.addEvent('click', function(e) {
 					e.preventDefault();
 				
 					if (media.paused) {

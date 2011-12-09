@@ -776,11 +776,11 @@ mejs.HtmlMediaElementShim = {
 			htmlMediaElement = (typeof(el) == 'string') ? document.getElementById(el) : el,
 			tagName = htmlMediaElement.tagName.toLowerCase(),
 			isMediaTag = (tagName === 'audio' || tagName === 'video'),
-			src = (isMediaTag) ? htmlMediaElement.getAttribute('src') : htmlMediaElement.getAttribute('href'),
-			poster = htmlMediaElement.getAttribute('poster'),
-			autoplay =  htmlMediaElement.getAttribute('autoplay'),
-			preload =  htmlMediaElement.getAttribute('preload'),
-			controls =  htmlMediaElement.getAttribute('controls'),
+			src = (isMediaTag) ? htmlMediaElement.getProperty('src') : htmlMediaElement.getProperty('href'),
+			poster = htmlMediaElement.getProperty('poster'),
+			autoplay =  htmlMediaElement.getProperty('autoplay'),
+			preload =  htmlMediaElement.getProperty('preload'),
+			controls =  htmlMediaElement.getProperty('controls'),
 			playback,
 			prop;
 
@@ -855,7 +855,7 @@ mejs.HtmlMediaElementShim = {
 
 		// test for src attribute first
 		} else if (src !== null) {
-			type = this.formatType(src, htmlMediaElement.getAttribute('type'));
+			type = this.formatType(src, htmlMediaElement.getProperty('type'));
 			mediaFiles.push({type:type, url:src});
 
 		// then test for <source> elements
@@ -864,8 +864,8 @@ mejs.HtmlMediaElementShim = {
 			for (i = 0; i < htmlMediaElement.childNodes.length; i++) {
 				n = htmlMediaElement.childNodes[i];
 				if (n.nodeType == 1 && n.tagName.toLowerCase() == 'source') {
-					src = n.getAttribute('src');
-					type = this.formatType(src, n.getAttribute('type'));
+					src = document.id(n).getProperty('src');
+					type = this.formatType(src, n.getProperty('type'));
 					mediaFiles.push({type:type, url:src});
 				}
 			}
@@ -1037,8 +1037,8 @@ mejs.HtmlMediaElementShim = {
 		}
 
 		if (playback.isVideo) {
-			width = (options.videoWidth > 0) ? options.videoWidth : (htmlMediaElement.getAttribute('width') !== null) ? htmlMediaElement.getAttribute('width') : options.defaultVideoWidth;
-			height = (options.videoHeight > 0) ? options.videoHeight : (htmlMediaElement.getAttribute('height') !== null) ? htmlMediaElement.getAttribute('height') : options.defaultVideoHeight;
+			width = (options.videoWidth > 0) ? options.videoWidth : (htmlMediaElement.getProperty('width') !== null) ? htmlMediaElement.getProperty('width') : options.defaultVideoWidth;
+			height = (options.videoHeight > 0) ? options.videoHeight : (htmlMediaElement.getProperty('height') !== null) ? htmlMediaElement.getProperty('height') : options.defaultVideoHeight;
 		
 			// in case of '%' make sure it's encoded
 			width = mejs.Utility.encodeUrl(width);

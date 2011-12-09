@@ -6,7 +6,7 @@
 
 (function($) {
 
-$.extend(mejs.MepDefaults,
+Object.append(mejs.MepDefaults,
 	contextMenuItems = [
 		// demo of a fullscreen option
 		{ 
@@ -66,26 +66,26 @@ $.extend(mejs.MepDefaults,
 );
 
 
-	$.extend(MediaElementPlayer.prototype, {
+	Object.append(MediaElementPlayer.prototype, {
 		buildcontextmenu: function(player, controls, layers, media) {
 			
 			// create context menu
-			player.contextMenu = $('<div class="mejs-contextmenu"></div>')
-								.appendTo($('body'))
+			player.contextMenu = new Element('div', {'class':'mejs-contextmenu'})
+								.inject($('body'))
 								.hide();
 			
 			// create events for showing context menu
-			player.container.bind('contextmenu', function(e) {
+			player.container.addEvent('contextmenu', function(e) {
 				if (player.isContextMenuEnabled) {
 					e.preventDefault();
 					player.renderContextMenu(e.clientX-1, e.clientY-1);
 					return false;
 				}
 			});
-			player.container.bind('click', function() {
+			player.container.addEvent('click', function() {
 				player.contextMenu.hide();
 			});	
-			player.contextMenu.bind('mouseleave', function() {
+			player.contextMenu.addEvent('mouseleave', function() {
 
 				//console.log('context hover out');
 				player.startContextMenuTimer();
@@ -156,11 +156,11 @@ $.extend(mejs.MepDefaults,
 			t.contextMenu
 				.empty()
 				.append($(html))
-				.css({top:y, left:x})
+				.setStyles({top:y, left:x})
 				.show();
 				
 			// bind events
-			t.contextMenu.find('.mejs-contextmenu-item').each(function() {
+			t.contextMenu.getElement('.mejs-contextmenu-item').each(function() {
 							
 				// which one is this?
 				var $dom = $(this),

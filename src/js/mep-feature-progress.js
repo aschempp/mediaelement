@@ -1,10 +1,11 @@
 (function($) {
 	// progress/loaded bar
-	$.extend(MediaElementPlayer.prototype, {
+	Object.append(MediaElementPlayer.prototype, {
 		buildprogress: function(player, controls, layers, media) {
 
-			$('<div class="mejs-time-rail">'+
-				'<span class="mejs-time-total">'+
+			new Element('div', {
+				'class': 'mejs-time-rail',
+				'html': '<span class="mejs-time-total">'+
 					'<span class="mejs-time-loaded"></span>'+
 					'<span class="mejs-time-current"></span>'+
 					'<span class="mejs-time-handle"></span>'+
@@ -12,29 +13,29 @@
 						'<span class="mejs-time-float-current">00:00</span>' + 
 						'<span class="mejs-time-float-corner"></span>' + 
 					'</span>'+
-				'</span>'+
-			'</div>')
-				.appendTo(controls);
+				'</span>'
+			})
+			.inject(controls, 'bottom');
 
 			var 
 				t = this,
-				total = controls.find('.mejs-time-total'),
-				loaded  = controls.find('.mejs-time-loaded'),
-				current  = controls.find('.mejs-time-current'),
-				handle  = controls.find('.mejs-time-handle'),
-				timefloat  = controls.find('.mejs-time-float'),
-				timefloatcurrent  = controls.find('.mejs-time-float-current'),
+				total = controls.getElement('.mejs-time-total'),
+				loaded  = controls.getElement('.mejs-time-loaded'),
+				current  = controls.getElement('.mejs-time-current'),
+				handle  = controls.getElement('.mejs-time-handle'),
+				timefloat  = controls.getElement('.mejs-time-float'),
+				timefloatcurrent  = controls.getElement('.mejs-time-float-current'),
 				handleMouseMove = function (e) {
 					// mouse position relative to the object
-					var x = e.pageX,
-						offset = total.offset(),
-						width = total.outerWidth(),
+					var x = e.page.x,
+						position = total.getPosition(),
+						width = total.getSize().x,
 						percentage = 0,
 						newTime = 0;
 
 
-					if (x > offset.left && x <= width + offset.left && media.duration) {
-						percentage = ((x - offset.left) / width);
+					if (x > position.x && x <= width + position.x && media.duration) {
+						percentage = ((x - position.x) / width);
 						newTime = (percentage <= 0.02) ? 0 : percentage * media.duration;
 
 						// seek to where the mouse is
@@ -43,40 +44,40 @@
 						}
 
 						// position floating time box
-						var pos = x - offset.left;
-						timefloat.css('left', pos);
-						timefloatcurrent.html( mejs.Utility.secondsToTimeCode(newTime) );
+						var pos = x - position.x;
+						timefloat.setStyle('left', pos+'px');
+						timefloatcurrent.set('html', mejs.Utility.secondsToTimeCode(newTime));
 					}
 				},
 				mouseIsDown = false,
 				mouseIsOver = false;
 
 			// handle clicks
-			//controls.find('.mejs-time-rail').delegate('span', 'click', handleMouseMove);
+			//controls.getElement('.mejs-time-rail').delegate('span', 'click', handleMouseMove);
 			total
-				.bind('mousedown', function (e) {
+				.addEvent('mousedown', function (e) {
 					// only handle left clicks
-					if (e.which === 1) {
+					if (!e.rightClick) {
 						mouseIsDown = true;
 						handleMouseMove(e);
 						return false;
 					}					
 				});
 
-			controls.find('.mejs-time-total')
-				.bind('mouseenter', function(e) {
+			controls.getElement('.mejs-time-total')
+				.addEvent('mouseenter', function(e) {
 					mouseIsOver = true;
 				})
-				.bind('mouseleave',function(e) {
+				.addEvent('mouseleave',function(e) {
 					mouseIsOver = false;
 				});
 
-			$(document)
-				.bind('mouseup', function (e) {
+			document
+				.addEvent('mouseup', function (e) {
 					mouseIsDown = false;
 					//handleMouseMove(e);
 				})
-				.bind('mousemove', function (e) {
+				.addEvent('mousemove', function (e) {
 					if (mouseIsDown || mouseIsOver) {
 						handleMouseMove(e);
 					}
@@ -130,7 +131,7 @@
 				percent = Math.min(1, Math.max(0, percent));
 				// update loaded bar
 				if (t.loaded && t.total) {
-					t.loaded.width(t.total.width() * percent);
+					t.loaded.setStyle('width', (t.total.getSize().x * percent));
 				}
 			}
 		},
@@ -143,11 +144,11 @@
 				// update bar and handle
 				if (t.total && t.handle) {
 					var 
-						newWidth = t.total.width() * t.media.currentTime / t.media.duration,
-						handlePos = newWidth - (t.handle.outerWidth(true) / 2);
+						newWidth = t.total.getSize().x * t.media.currentTime / t.media.duration,
+						handlePos = newWidth - (t.handle.getComputedSize({styles:['padding','border','margin']}).totalWidth / 2);
 
-					t.current.width(newWidth);
-					t.handle.css('left', handlePos);
+					t.current.setStyle('width', newWidth+'px');
+					t.handle.setStyle('left', handlePos+'px');
 				}
 			}
 

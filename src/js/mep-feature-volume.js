@@ -1,36 +1,35 @@
 (function($) {
 
-	$.extend(mejs.MepDefaults, {
+	Object.append(mejs.MepDefaults, {
 		muteText: 'Mute Toggle',
 		hideVolumeOnTouchDevices: true
 	});
 
-	$.extend(MediaElementPlayer.prototype, {
+	Object.append(MediaElementPlayer.prototype, {
 		buildvolume: function(player, controls, layers, media) {
-			
 			// Android and iOS don't support volume controls
 			if (mejs.MediaFeatures.hasTouch && this.options.hideVolumeOnTouchDevices)
 				return;
 			
 			var t = this,
 				mute = 
-				$('<div class="mejs-button mejs-volume-button mejs-mute">'+
-					'<button type="button" aria-controls="' + t.id + '" title="' + t.options.muteText + '"></button>'+
+				new Element('div', {
+					'class': 'mejs-button mejs-volume-button mejs-mute',
+					'html': ('<button type="button" aria-controls="' + t.id + '" title="' + t.options.muteText + '"></button>'+
 					'<div class="mejs-volume-slider">'+ // outer background
 						'<div class="mejs-volume-total"></div>'+ // line background
 						'<div class="mejs-volume-current"></div>'+ // current volume
 						'<div class="mejs-volume-handle"></div>'+ // handle
-					'</div>'+
-				'</div>')
-				.appendTo(controls),
-			volumeSlider = mute.find('.mejs-volume-slider'),
-			volumeTotal = mute.find('.mejs-volume-total'),
-			volumeCurrent = mute.find('.mejs-volume-current'),
-			volumeHandle = mute.find('.mejs-volume-handle'),
+					'</div>')
+				})
+				.inject(controls),
+			volumeSlider = mute.getElement('.mejs-volume-slider'),
+			volumeTotal = mute.getElement('.mejs-volume-total'),
+			volumeCurrent = mute.getElement('.mejs-volume-current'),
+			volumeHandle = mute.getElement('.mejs-volume-handle'),
 
 			positionVolumeHandle = function(volume) {
-
-				if (!volumeSlider.is(':visible')) {
+				if (!volumeSlider.isVisible()) {
 					volumeSlider.show();
 					positionVolumeHandle(volume);
 					volumeSlider.hide()
@@ -40,32 +39,32 @@
 				var 
 				
 					// height of the full size volume slider background
-					totalHeight = volumeTotal.height(),
+					totalHeight = volumeTotal.getSize().y,
 					
 					// top/left of full size volume slider background
-					totalPosition = volumeTotal.position(),
+					totalPosition = volumeTotal.getPosition(volumeTotal.getOffsetParent()),
 					
 					// the new top position based on the current volume
 					// 70% volume on 100px height == top:30px
 					newTop = totalHeight - (totalHeight * volume);
 
 				// handle
-				volumeHandle.css('top', totalPosition.top + newTop - (volumeHandle.height() / 2));
+				volumeHandle.setStyle('top', (totalPosition.y + newTop - (volumeHandle.getSize().y / 2))+'px');
 
 				// show the current visibility
-				volumeCurrent.height(totalHeight - newTop );
-				volumeCurrent.css('top', totalPosition.top + newTop);
+				volumeCurrent.setStyle('height', (totalHeight - newTop) + 'px' );
+				volumeCurrent.setStyle('top', (totalPosition.y + newTop) + 'px');
 			},
 			handleVolumeMove = function(e) {
 				var
-					railHeight = volumeTotal.height(),
-					totalOffset = volumeTotal.offset(),
-					totalTop = parseInt(volumeTotal.css('top').replace(/px/,''),10),
-					newY = e.pageY - totalOffset.top,
+					railHeight = volumeTotal.getSize().y,
+					totalOffset = volumeTotal.getPosition(),
+					totalTop = parseInt(volumeTotal.getStyle('top').replace(/px/,''),10),
+					newY = e.page.y - totalOffset.y,
 					volume = (railHeight - newY) / railHeight
 					
 				// the controls just hide themselves (usually when mouse moves too far up)
-				if (totalOffset.top == 0)
+				if (totalOffset.y == 0)
 					return;
 					
 				// 0-1
@@ -80,11 +79,11 @@
 					newY = railHeight;
 
 				// move the handle to match the mouse
-				volumeHandle.css('top', newY - (volumeHandle.height() / 2) + totalTop );
+				volumeHandle.setStyle('top', (newY - (volumeHandle.getSize().y / 2) + totalTop) + 'px' );
 
 				// show the current visibility
-				volumeCurrent.height(railHeight-newY);
-				volumeCurrent.css('top',newY+totalTop);
+				volumeCurrent.setStyle('height', (railHeight-newY)+'px');
+				volumeCurrent.setStyle('top', (newY+totalTop)+'px');
 
 				// set mute status
 				if (volume == 0) {
@@ -105,23 +104,23 @@
 
 			// SLIDER
 			mute
-				.hover(function() {
+				.addEvent('mouseenter', function() {
 					volumeSlider.show();
-				}, function() {
+				}).addEvent('mouseleave', function() {
 					volumeSlider.hide();
 				})		
 			
 			volumeSlider
-				.bind('mousedown', function (e) {
+				.addEvent('mousedown', function (e) {
 					handleVolumeMove(e);
 					mouseIsDown = true;
 					return false;
 				});
-			$(document)
-				.bind('mouseup', function (e) {
+			document
+				.addEvent('mouseup', function (e) {
 					mouseIsDown = false;
 				})
-				.bind('mousemove', function (e) {
+				.addEvent('mousemove', function (e) {
 					if (mouseIsDown) {
 						handleVolumeMove(e);
 					}
@@ -129,7 +128,7 @@
 
 
 			// MUTE button
-			mute.find('button').click(function() {
+			mute.getElement('button').addEvent('click', function() {
 
 				media.setMuted( !media.muted );
 				

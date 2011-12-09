@@ -1,7 +1,7 @@
 (function($) {
 
 	// add extra default options 
-	$.extend(mejs.MepDefaults, {
+	Object.append(mejs.MepDefaults, {
 		// this will automatically turn on a <track>
 		startLanguage: '',
 		// a list of languages to auto-translate via Google
@@ -14,7 +14,7 @@
 		tracksText: 'Captions/Subtitles'
 	});
 
-	$.extend(MediaElementPlayer.prototype, {
+	Object.append(MediaElementPlayer.prototype, {
 	
 		hasChapters: false,
 
@@ -28,31 +28,36 @@
 			var t= this, i, options = '';
 
 			player.chapters = 
-					$('<div class="mejs-chapters mejs-layer"></div>')
-						.prependTo(layers).hide();
+					new Element('div', {'class': 'mejs-chapters mejs-layer', tween: {duration: 200}})
+						.inject(layers, 'before').hide();
 			player.captions = 
-					$('<div class="mejs-captions-layer mejs-layer"><div class="mejs-captions-position"><span class="mejs-captions-text"></span></div></div>')
-						.prependTo(layers).hide();
-			player.captionsText = player.captions.find('.mejs-captions-text');
+					new Element('div', {
+						'class': 'mejs-captions-layer mejs-layer',
+						'html': '<div class="mejs-captions-position"><span class="mejs-captions-text"></span></div>'
+					})
+					.inject(layers, 'before').hide();
+			player.captionsText = player.captions.getElement('.mejs-captions-text');
 			player.captionsButton = 
-					$('<div class="mejs-button mejs-captions-button">'+
-						'<button type="button" aria-controls="' + t.id + '" title="' + t.options.tracksText + '"></button>'+
-						'<div class="mejs-captions-selector">'+
-							'<ul>'+
-								'<li>'+
-									'<input type="radio" name="' + player.id + '_captions" id="' + player.id + '_captions_none" value="none" checked="checked" />' +
-									'<label for="' + player.id + '_captions_none">None</label>'+
-								'</li>'	+
-							'</ul>'+
-						'</div>'+
-					'</div>')
-						.appendTo(controls)
+					new Element('div', {
+						'class': 'mejs-button mejs-captions-button',
+						'html': ('<button type="button" aria-controls="' + t.id + '" title="' + t.options.tracksText + '"></button>'+
+							'<div class="mejs-captions-selector">'+
+								'<ul>'+
+									'<li>'+
+										'<input type="radio" name="' + player.id + '_captions" id="' + player.id + '_captions_none" value="none" checked="checked" />' +
+										'<label for="' + player.id + '_captions_none">None</label>'+
+									'</li>'	+
+								'</ul>'+
+							'</div>')
+						})
+						.inject(controls)
 						
 						// hover
-						.hover(function() {
-							$(this).find('.mejs-captions-selector').css('visibility','visible');
-						}, function() {
-							$(this).find('.mejs-captions-selector').css('visibility','hidden');
+						.addEvent('mouseenter', function() {
+							player.captionsButton.getElement('.mejs-captions-selector').setStyle('visibility','visible');
+						})
+						.addEvent('mouseleave', function() {
+							player.captionsButton.getElement('.mejs-captions-selector').setStyle('visibility','hidden');
 						})					
 						
 						// handle clicks to the language radio buttons
@@ -72,26 +77,26 @@
 								}
 							}
 						});
-						//.bind('mouseenter', function() {
-						//	player.captionsButton.find('.mejs-captions-selector').css('visibility','visible')
+						//.addEvent('mouseenter', function() {
+						//	player.captionsButton.getElement('.mejs-captions-selector').setStyle('visibility','visible')
 						//});
 
 			if (!player.options.alwaysShowControls) {
 				// move with controls
 				player.container
-					.bind('mouseenter', function () {
+					.addEvent('mouseenter', function () {
 						// push captions above controls
-						player.container.find('.mejs-captions-position').addClass('mejs-captions-position-hover');
+						player.container.getElement('.mejs-captions-position').addClass('mejs-captions-position-hover');
 
 					})
-					.bind('mouseleave', function () {
+					.addEvent('mouseleave', function () {
 						if (!media.paused) {
 							// move back to normal place
-							player.container.find('.mejs-captions-position').removeClass('mejs-captions-position-hover');
+							player.container.getElement('.mejs-captions-position').removeClass('mejs-captions-position-hover');
 						}
 					});
 			} else {
-				player.container.find('.mejs-captions-position').addClass('mejs-captions-position-hover');
+				player.container.getElement('.mejs-captions-position').addClass('mejs-captions-position-hover');
 			}
 
 			player.trackToLoad = -1;
@@ -130,26 +135,26 @@
 				player.displayChapters();
 			}, false);
 
-			player.container.hover(
-				function () {
+			player.container
+				.addEvent('mouseenter', function () {
 					// chapters
 					if (player.hasChapters) {
-						player.chapters.css('visibility','visible');
-						player.chapters.fadeIn(200);
+						player.chapters.setStyle('visibility','visible');
+						player.chapters.fade('in');
 					}
-				},
-				function () {
+				})
+				.addEvent('mouseleave', function () {
 					if (player.hasChapters && !media.paused) {
-						player.chapters.fadeOut(200, function() {
-							$(this).css('visibility','hidden');
-							$(this).css('display','block');
+						player.chapters.fade('out').get('tween').chain(function() {
+							player.chapters.setStyle('visibility','hidden');
+							player.chapters.setStyle('display','block');
 						});
 					}
 				});
 				
 			// check for autoplay
-			if (player.node.getAttribute('autoplay') !== null) {
-				player.chapters.css('visibility','hidden');
+			if (player.node.getProperty('autoplay') !== null) {
+				player.chapters.setStyle('visibility','hidden');
 			}				
 
 			// auto selector
@@ -157,14 +162,14 @@
 				for (i in mejs.language.codes) {
 					options += '<option value="' + i + '">' + mejs.language.codes[i] + '</option>';
 				}
-				player.container.find('.mejs-captions-selector ul').before($(
+				player.container.getElement('.mejs-captions-selector ul').before($(
 					'<select class="mejs-captions-translations">' +
 						'<option value="">--Add Translation--</option>' +
 						options +
 					'</select>'
 				));
 				// add clicks
-				player.container.find('.mejs-captions-translations').change(function() {
+				player.container.getElement('.mejs-captions-translations').change(function() {
 					var
 						option = $(this);
 						lang = option.val();
@@ -254,10 +259,10 @@
 			var t = this;
 
 			t.captionsButton
-				.find('input[value=' + lang + ']')
+				.getElement('input[value=' + lang + ']')
 					.prop('disabled',false)
-				.siblings('label')
-					.html( mejs.language.codes[lang] || lang );
+				.getSiblings('label')
+					.set('html',  mejs.language.codes[lang] || lang );
 
 			// auto select
 			if (t.options.startLanguage == lang) {
@@ -271,25 +276,26 @@
 			var t = this,
 				l = mejs.language.codes[lang] || lang;
 
-			t.captionsButton.find('ul').append(
-				$('<li>'+
-					'<input type="radio" name="' + t.id + '_captions" id="' + t.id + '_captions_' + lang + '" value="' + lang + '" disabled="disabled" />' +
-					'<label for="' + t.id + '_captions_' + lang + '">' + l + ((isTranslation) ? ' (translating)' : ' (loading)') + '</label>'+
-				'</li>')
+			t.captionsButton.getElement('ul').append(
+				new Element('li', {
+					html: (
+						'<input type="radio" name="' + t.id + '_captions" id="' + t.id + '_captions_' + lang + '" value="' + lang + '" disabled="disabled" />' +
+						'<label for="' + t.id + '_captions_' + lang + '">' + l + ((isTranslation) ? ' (translating)' : ' (loading)') + '</label>')
+				})
 			);
 
 			t.adjustLanguageBox();
 
 			// remove this from the dropdownlist (if it exists)
-			t.container.find('.mejs-captions-translations option[value=' + lang + ']').remove();
+			t.container.getElement('.mejs-captions-translations option[value=' + lang + ']').remove();
 		},
 
 		adjustLanguageBox:function() {
 			var t = this;
 			// adjust the size of the outer box
-			t.captionsButton.find('.mejs-captions-selector').height(
-				t.captionsButton.find('.mejs-captions-selector ul').outerHeight(true) +
-				t.captionsButton.find('.mejs-captions-translations').outerHeight(true)
+			t.captionsButton.getElement('.mejs-captions-selector').setStyle('height', 
+				t.captionsButton.getElement('.mejs-captions-selector ul').outerHeight(true) +
+				t.captionsButton.getElement('.mejs-captions-translations').outerHeight(true)
 			);
 		},
 
@@ -306,7 +312,7 @@
 			if (track != null && track.isLoaded) {
 				for (i=0; i<track.entries.times.length; i++) {
 					if (t.media.currentTime >= track.entries.times[i].start && t.media.currentTime <= track.entries.times[i].stop){
-						t.captionsText.html(track.entries.text[i]);
+						t.captionsText.set('html', track.entries.text[i]);
 						t.captions.show();
 						return; // exit out if one is visible;
 					}
@@ -367,7 +373,7 @@
 				usedPercent += percent;
 			}
 
-			t.chapters.find('div.mejs-chapter').click(function() {
+			t.chapters.getElement('div.mejs-chapter').addEvent('click', function() {
 				t.media.setCurrentTime( parseFloat( $(this).attr('rel') ) );
 				if (t.media.paused) {
 					t.media.play(); 
