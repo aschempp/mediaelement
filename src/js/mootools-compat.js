@@ -352,13 +352,20 @@ var MooToolsCompat = (function(window){
             return this;
 		},
 		
-		css: function(propertyName, value){
+		is: function(selector){
+			for (var i = 0; i < this.length; i++){
+				if (this[i].match(selector)) return true;
+            }
+            return false;
+		},
+		
+		css: function(property, value){
 			if (typeof value == 'undefined'){
-				return this[0].getStyle(propertyName);
+				return this[0].getStyle(property);
 			}
 			
 			for (var i = 0; i < this.length; i++){
-                this[i].setStyle(propertyName, value);
+                this[i].setStyle(property, value);
             }
 			return this;
 		},
@@ -497,6 +504,10 @@ var MooToolsCompat = (function(window){
     		new MooToolsAdapter(this).children(selector);
     	}
     });
+    
+    Slick.definePseudo('visible', function() {
+        return (this.getStyle('visibility') != 'hidden' && this.isVisible() && this.isDisplayed());
+	});
 
     return MooToolsCompat.$;
 });
