@@ -267,7 +267,11 @@ var MooToolsCompat = (function(window){
         },
         
         find: function(selector){
-        	return this[0].getElements(selector);
+        	var elements = [];
+			for (var i = 0; i < this.length; i++){
+                elements.append(this[i].getElements(selector));
+            }
+			return new MooToolsAdapter(elements);
         },
         
         width: function(value){
@@ -293,7 +297,24 @@ var MooToolsCompat = (function(window){
 		},
 		
 		children: function(selector){
-			return new MooToolsAdapter(this[0].getChildren(selector));
+			var elements = [];
+			for (var i = 0; i < this.length; i++){
+                elements.append(this[i].getChildren(selector));
+            }
+			return new MooToolsAdapter(elements);
+		},
+		
+		append: function(content){
+			if (content.length){
+				for (var i = 0; i < this.length; i++){
+					this.append(content[i]);
+				}
+				return;
+			}
+			
+			for (var i = 0; i < this.length; i++){
+				this[i].inject((i==0 ? content : content.clone()));
+            }
 		}
     });
 
