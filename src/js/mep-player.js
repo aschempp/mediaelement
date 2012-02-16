@@ -1028,11 +1028,6 @@
 		};
 	}
 	
-	$(document).ready(function() {
-		// auto enable using JSON attribute
-		$('.mejs-player').mediaelementplayer();
-	});
-	
 	// push out to window
 	window.MediaElementPlayer = mejs.MediaElementPlayer;
 
