@@ -49,8 +49,8 @@ var MooToolsCompat = (function(window){
          *
          * @param selector A CSS3 selector.
          */
-        appendTo: function(selector){
-            var elements = window.getElements(selector);
+        appendTo: function(target){
+            var elements = typeof target == 'string' ? window.getElements(target) : target;
 
             for (var i = 0; i < elements.length; i++){
                 if (i > 0){
