@@ -170,6 +170,7 @@ var MooToolsCompat = (function(window){
                     	if (e){
 		                    e.pageX = e.page.x;
 		                    e.pageY = e.page.y;
+	                    	e.which = e.rightClick ? 3 : 1;
 		                    e.keyCode = e.code;
 		                }
 	                    method.call(this, e)
