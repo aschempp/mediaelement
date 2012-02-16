@@ -40,6 +40,13 @@ var MooToolsCompat = (function(window){
             }
             return this;
         },
+        
+        show: function(){
+            for (var i = 0; i < this.length; i++){
+                this[i].setStyle('display', 'block');
+            }
+            return this;
+        },
 
         /**
          * Append the frst element in the MooToolsAdapter to the elements found by the passed in
@@ -259,6 +266,13 @@ var MooToolsCompat = (function(window){
             return this;
         },
         
+        removeClass: function(className){
+        	for (var i = 0; i < this.length; i++){
+                this[i].removeClass(className);
+            }
+            return this;
+        },
+        
         insertBefore: function(element){
         	for (var i = 0; i < this.length; i++){
                 this[i].inject(element[0], 'before');
@@ -273,28 +287,6 @@ var MooToolsCompat = (function(window){
             }
 			return new MooToolsAdapter(elements);
         },
-        
-        width: function(value){
-			if (typeof value == 'undefined'){
-				return this[0].getSize().x;
-			}
-			
-			for (var i = 0; i < this.length; i++){
-                this[i].setStyle('width', value);
-            }
-			return this;
-		},
-		
-		height: function(value){
-			if (typeof value == 'undefined'){
-				return this[0].getSize().y;
-			}
-			
-			for (var i = 0; i < this.length; i++){
-                this[i].setStyle('height', value);
-            }
-			return this;
-		},
 		
 		children: function(selector){
 			var elements = [];
@@ -344,11 +336,57 @@ var MooToolsCompat = (function(window){
 			return this.bind('click', fn);
 		},
 		
+		resize: function(fn){
+			return this.bind('resize', fn);
+		},
+		
 		each: function(fn){
 			for (var i = 0; i < this.length; i++){
 				fn.call(this, i, this[i]);
             }
             return this;
+		},
+		
+		css: function(propertyName, value){
+			if (typeof value == 'undefined'){
+				return this[0].getStyle(propertyName);
+			}
+			
+			for (var i = 0; i < this.length; i++){
+                this[i].setStyle(propertyName, value);
+            }
+			return this;
+		},
+
+        width: function(value){
+			if (typeof value == 'undefined'){
+				return this[0].getSize().x;
+			}
+			
+			for (var i = 0; i < this.length; i++){
+                this[i].setStyle('width', value);
+            }
+			return this;
+		},
+		
+		outerWidth: function(includeMargin){
+			return this[0].getSize().x;
+		},
+		
+		height: function(value){
+			if (typeof value == 'undefined'){
+				return this[0].getSize().y;
+			}
+			
+			for (var i = 0; i < this.length; i++){
+                this[i].setStyle('height', value);
+            }
+			return this;
+		},
+		
+		offset: function(){
+			var pos = this[0].getPosition();
+			return {top: pos.x, left: pos.y};
 		}
     });
 
