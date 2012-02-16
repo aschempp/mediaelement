@@ -11,6 +11,7 @@ combined_filename = 'mediaelement-and-player'
 print('building MediaElement.js')
 me_files = []
 me_files.append('me-header.js')
+me_files.append('mootools-compat.js')
 me_files.append('me-namespace.js')
 me_files.append('me-utility.js')
 me_files.append('me-plugindetector.js')
