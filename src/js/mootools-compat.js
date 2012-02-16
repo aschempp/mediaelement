@@ -340,9 +340,14 @@ var MooToolsCompat = (function(window){
 			return this.bind('resize', fn);
 		},
 		
+		hover: function(fn1, fn2){
+			this.bind('mouseenter', fn1);
+			this.bind('mouseleave', fn2);
+		},
+		
 		each: function(fn){
 			for (var i = 0; i < this.length; i++){
-				fn.call(this, i, this[i]);
+				fn.call(this[i], i, this[i]);
             }
             return this;
 		},
@@ -386,6 +391,11 @@ var MooToolsCompat = (function(window){
 		
 		offset: function(){
 			var pos = this[0].getPosition();
+			return {top: pos.x, left: pos.y};
+		},
+		
+		position: function(){
+			var pos = this[0].getPosition(this[0].getOffsetParent());
 			return {top: pos.x, left: pos.y};
 		}
     });
