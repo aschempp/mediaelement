@@ -313,6 +313,14 @@ var MooToolsCompat = (function(window){
 			return new MooToolsAdapter([]);
 		},
 		
+		siblings: function(selector){
+			var elements = [];
+			for (var i = 0; i < this.length; i++){
+                elements.append(this[i].getSiblings(selector));
+            }
+			return new MooToolsAdapter(elements);
+		},
+		
 		append: function(content){
 			if (content.length){
 				for (var i = 0; i < this.length; i++){
