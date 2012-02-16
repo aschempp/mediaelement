@@ -167,8 +167,10 @@ var MooToolsCompat = (function(window){
                     this[i].addEventListener(eventName, method);
                 } else {
                     this[i].addEvent(eventName, function(e) {
-	                    e.pageX = e.page.x;
-	                    e.pageY = e.page.y;
+                    	if (e && e.page){
+		                    e.pageX = e.page.x;
+		                    e.pageY = e.page.y;
+		                }
 	                    method.call(this, e)
                     });
                 }
