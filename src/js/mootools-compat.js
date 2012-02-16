@@ -36,7 +36,7 @@ var MooToolsCompat = (function(window){
          */
         hide: function(){
             for (var i = 0; i < this.length; i++){
-                this[i].setStyle({display: 'none'});
+                this[i].setStyle('display', 'none');
             }
             return this;
         },
