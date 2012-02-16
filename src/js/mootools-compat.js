@@ -166,7 +166,11 @@ var MooToolsCompat = (function(window){
                 if (eventName == 'popstate' || eventName == 'hashchange'){
                     this[i].addEventListener(eventName, method);
                 } else {
-                    this[i].addEvent(eventName, method);
+                    this[i].addEvent(eventName, function(e) {
+	                    e.pageX = e.page.x;
+	                    e.pageY = e.page.y;
+	                    method.call(this, e)
+                    });
                 }
             }
             return this;
@@ -406,12 +410,47 @@ var MooToolsCompat = (function(window){
 		
 		offset: function(){
 			var pos = this[0].getPosition();
-			return {top: pos.x, left: pos.y};
+			return {top: pos.y, left: pos.x};
 		},
 		
 		position: function(){
 			var pos = this[0].getPosition(this[0].getOffsetParent());
-			return {top: pos.x, left: pos.y};
+			return {top: pos.y, left: pos.x};
+		},
+		
+		stop: function(clearQueue, jumpToEnd){
+			for (var i = 0; i < this.length; i++){
+                var tween = this[i].get('tween').cancel();
+                
+                if (clearQueue){
+                	tween.clearChain();
+                }
+                
+                if (jumpToEnd){
+                	if (tween.property) tween.set(tween.property, tween.to);
+                }
+            }
+			return this;
+		},
+		
+		fadeOut: function(){
+			for (var i = 0; i < this.length; i++){
+				if (arguments.length > 0){
+					this[i].set('tween', (arguments[1] ? {duration:arguments[0], onComplete:arguments[1].bind(this[i])} : {duration:arguments[0]}));
+				}
+				this[i].fade('out');
+			}
+			return this;
+		},
+		
+		fadeIn: function(){
+			for (var i = 0; i < this.length; i++){
+				if (arguments.length > 0){
+					this[i].set('tween', (arguments[1] ? {duration:arguments[0], onComplete:arguments[1].bind(this[i])} : {duration:arguments[0]}));
+				}
+				this[i].fade('in');
+			}
+			return this;
 		}
     });
 
