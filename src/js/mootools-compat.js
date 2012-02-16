@@ -313,7 +313,7 @@ var MooToolsCompat = (function(window){
 			}
 			
 			for (var i = 0; i < this.length; i++){
-				this[i].inject((i==0 ? content : content.clone()));
+				this[i].adopt((i==0 ? content : content.clone()));
             }
 		}
     });
