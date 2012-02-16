@@ -309,12 +309,22 @@ var MooToolsCompat = (function(window){
 				for (var i = 0; i < this.length; i++){
 					this.append(content[i]);
 				}
-				return;
+				return this;
 			}
 			
 			for (var i = 0; i < this.length; i++){
 				this[i].adopt((i==0 ? content : content.clone()));
             }
+            
+            return this;
+		},
+		
+		keydown: function(handler){
+			return this.bind('keydown', handler);
+		},
+		
+		click: function(handler){
+			return this.bind('click', handler);
 		}
     });
 
