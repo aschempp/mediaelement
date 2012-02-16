@@ -1019,19 +1019,28 @@
 		}
 	};
 
-	// turn into jQuery plugin
+	// turn into jQuery plugin and register domready event
 	if (typeof jQuery != 'undefined') {
 		jQuery.fn.mediaelementplayer = function (options) {
 			return this.each(function () {
 				new mejs.MediaElementPlayer(this, options);
 			});
 		};
+		
+		$(document).ready(function() {
+			// auto enable using JSON attribute
+			$('.mejs-player').mediaelementplayer();
+		});
 	}
-	
-	$(document).ready(function() {
-		// auto enable using JSON attribute
-		$('.mejs-player').mediaelementplayer();
-	});
+	else if (typeof MooTools != 'undefined') {
+		Element.implement('mediaelementplayer', function(options) {
+			return new mejs.MediaElementPlayer(this, options);
+		});
+		
+		window.addEvent('domready', function() {
+			document.getElements('.mejs-player').mediaelementplayer();
+		});
+	}
 	
 	// push out to window
 	window.MediaElementPlayer = mejs.MediaElementPlayer;
