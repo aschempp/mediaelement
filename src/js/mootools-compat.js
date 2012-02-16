@@ -385,6 +385,24 @@ var MooToolsCompat = (function(window){
 
         new Request(parameters).send();
     };
+    
+    /*
+     * $.extend
+     *
+     * Merge the contents of two or more objects together into the first object.
+     */
+    MooToolsCompat.$.extend = function(){
+    	var i = 1;
+    	if (typeof arguments[0] == 'boolean')
+    		i=2;
+    	
+    	var target = arguments[i-1];
+    	for (; i < arguments.length; i++){
+            Object.append(target, arguments[i]);
+        }
+        
+    	return target;
+    }
 
 //	Element.alias('getProperty', 'getAttribute');
 //	Element.alias('removeProperty', 'removeAttr');
