@@ -304,6 +304,15 @@ var MooToolsCompat = (function(window){
 			return new MooToolsAdapter(elements);
 		},
 		
+		closest: function(selector){
+			for (var i = 0; i < this.length; i++){
+                var c = this[i].getParent(selector);
+                if (c)
+                	return new MooToolsAdapter([c]);
+            }
+			return new MooToolsAdapter([]);
+		},
+		
 		append: function(content){
 			if (content.length){
 				for (var i = 0; i < this.length; i++){
