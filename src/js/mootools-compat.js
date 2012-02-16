@@ -328,12 +328,19 @@ var MooToolsCompat = (function(window){
             return this;
 		},
 		
-		keydown: function(handler){
-			return this.bind('keydown', handler);
+		keydown: function(fn){
+			return this.bind('keydown', fn);
 		},
 		
-		click: function(handler){
-			return this.bind('click', handler);
+		click: function(fn){
+			return this.bind('click', fn);
+		},
+		
+		each: function(fn){
+			for (var i = 0; i < this.length; i++){
+				fn.call(this, i, this[i]);
+            }
+            return this;
 		}
     });
 
