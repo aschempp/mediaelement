@@ -504,18 +504,11 @@ var MooToolsCompat = (function(window){
      * Maps a jQuery ajax request to a MooTools Request and sends it.
      */
     MooToolsCompat.$.ajax = function(params){
-        var emulation = false;
-        var data = params.data;
-        if (Backbone.emulateJSON){
-            emulation = true;
-            data = data ? { model: data } : {};
-        }
-
         var parameters = {
             url: params.url,
             method: params.type,
-            data: data,
-            emulation: emulation,
+            data: params.data,
+            emulation: false,
             onSuccess: function(responseText){
                 params.success(JSON.parse(responseText));
             },
@@ -543,12 +536,6 @@ var MooToolsCompat = (function(window){
         
     	return target;
     }
-
-//	Element.alias('getProperty', 'getAttribute');
-//	Element.alias('removeProperty', 'removeAttr');
-//	Element.alias('setStyles', 'css');
-//	Element.alias('getElements', 'find');
-
 
 	Array.implement({
     	children: function(selector){
