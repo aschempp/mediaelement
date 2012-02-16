@@ -372,8 +372,12 @@ var MooToolsCompat = (function(window){
 
         width: function(value){
 			if (typeof value == 'undefined'){
-				return this[0].getSize().x;
+				// DOMWindow does not support getComputedSize
+				return this[0].getComputedSize ? this[0].getComputedSize().width : this[0].getSize().y;
 			}
+			
+			// fix numeric string
+			value = value.toInt() == value ? value+'px' : value;
 			
 			for (var i = 0; i < this.length; i++){
                 this[i].setStyle('width', value);
@@ -382,13 +386,17 @@ var MooToolsCompat = (function(window){
 		},
 		
 		outerWidth: function(includeMargin){
-			return this[0].getSize().x;
+			return includeMargin ? this[0].getComputedSize({styles:['padding','border','margin']}).totalWidth : this[0].getSize().x;
 		},
 		
 		height: function(value){
 			if (typeof value == 'undefined'){
-				return this[0].getSize().y;
+				// DOMWindow does not support getComputedSize
+				return this[0].getComputedSize ? this[0].getComputedSize().height : this[0].getSize().x;
 			}
+			
+			// fix numeric string
+			value = value.toInt() == value ? value+'px' : value;
 			
 			for (var i = 0; i < this.length; i++){
                 this[i].setStyle('height', value);
