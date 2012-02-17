@@ -440,7 +440,14 @@ var MooToolsCompat = (function(window){
 		fadeOut: function(){
 			for (var i = 0; i < this.length; i++){
 				if (arguments.length > 0){
-					this[i].set('tween', (arguments[1] ? {duration:arguments[0], onComplete:arguments[1].bind(this[i])} : {duration:arguments[0]}));
+					this[i].set('tween', {duration:arguments[0]});
+					
+					if (arguments[1]){
+						var t = this[i],
+							fn = arguments[1];
+							
+						t.get('tween').chain(function(){ fn.call(t); this.callChain() });
+					}
 				}
 				this[i].fade('out');
 			}
@@ -450,7 +457,14 @@ var MooToolsCompat = (function(window){
 		fadeIn: function(){
 			for (var i = 0; i < this.length; i++){
 				if (arguments.length > 0){
-					this[i].set('tween', (arguments[1] ? {duration:arguments[0], onComplete:arguments[1].bind(this[i])} : {duration:arguments[0]}));
+					this[i].set('tween', {duration:arguments[0]});
+					
+					if (arguments[1]){
+						var t = this[i],
+							fn = arguments[1];
+							
+						t.get('tween').chain(function(){ fn.call(t); this.callChain() });
+					}
 				}
 				this[i].fade('in');
 			}
