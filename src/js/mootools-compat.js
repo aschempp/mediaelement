@@ -336,6 +336,26 @@ var MooToolsCompat = (function(window){
             return this;
 		},
 		
+		clone: function(){
+			var elements = [];
+			for (var i = 0; i < this.length; i++){
+				elements.append(Array.from(this[i].clone()));
+            }
+            
+            return new MooToolsAdapter(elements);
+		},
+		
+		remove: function(){
+			for (var i = 0; i < this.length; i++){
+				this[i].destroy();
+				delete this[i];
+            }
+            
+            this.length = 0;
+            
+            return this;
+		},
+		
 		keydown: function(fn){
 			return this.bind('keydown', fn);
 		},
