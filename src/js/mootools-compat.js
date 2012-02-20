@@ -291,8 +291,7 @@ var MooToolsCompat = (function(window){
         find: function(selector){
         	var elements = [];
 			for (var i = 0; i < this.length; i++){
-				var match = this[i].getElements(selector);
-				if (match) elements.append((typeof match == 'array' ? match : [match]));
+				elements.append(Array.from(this[i].getElements(selector)));
             }
 			return new MooToolsAdapter(elements);
         },
@@ -300,8 +299,7 @@ var MooToolsCompat = (function(window){
 		children: function(selector){
 			var elements = [];
 			for (var i = 0; i < this.length; i++){
-				var match = this[i].getChildren(selector);
-				if (match) elements.append((typeof match == 'array' ? match : [match]));
+				elements.append(Array.from(this[i].getChildren(selector)));
             }
 			return new MooToolsAdapter(elements);
 		},
@@ -318,8 +316,7 @@ var MooToolsCompat = (function(window){
 		siblings: function(selector){
 			var elements = [];
 			for (var i = 0; i < this.length; i++){
-				var match = this[i].getSiblings(selector);
-				if (match) elements.append((typeof match == 'array' ? match : [match]));
+				elements.append(Array.from(this[i].getSiblings(selector)));
             }
 			return new MooToolsAdapter(elements);
 		},
