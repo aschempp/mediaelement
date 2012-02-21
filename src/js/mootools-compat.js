@@ -388,6 +388,13 @@ var MooToolsCompat = (function(window){
 		},
 		
 		css: function(property, value){
+			if (typeof property == 'object'){
+				for (var i = 0; i < this.length; i++){
+	                this[i].setStyles(property);
+	            }
+				return this;
+			}
+			
 			if (typeof value == 'undefined'){
 				return this[0].getStyle(property);
 			}
