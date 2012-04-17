@@ -163,7 +163,7 @@ var MooToolsCompat = (function(window){
 
             // Bind the events.
             for (var i = 0; i < this.length; i++){
-                if (eventName == 'popstate' || eventName == 'hashchange'){
+                if (eventName == 'popstate' || eventName == 'hashchange' || !this[i].addEvent){
                     this[i].addEventListener(eventName, method);
                 } else {
                     this[i].addEvent(eventName, function(e) {
@@ -412,16 +412,20 @@ var MooToolsCompat = (function(window){
 			}
 			
 			// fix numeric string
-			value = value.toInt() == value ? value+'px' : value;
-			
-			for (var i = 0; i < this.length; i++){
-                this[i].setStyle('width', value);
-            }
+			if (value > 0)
+			{
+				value = value.toInt() == value ? value+'px' : value;
+				
+				for (var i = 0; i < this.length; i++){
+	                this[i].setStyle('width', value);
+	            }
+	        }
+	        
 			return this;
 		},
 		
 		outerWidth: function(includeMargin){
-			return includeMargin ? this[0].getComputedSize({styles:['padding','border','margin']}).totalWidth : this[0].getSize().x;
+			return (includeMargin && this[0].getComputedSize) ? this[0].getComputedSize({styles:['padding','border','margin']}).totalWidth : this[0].getSize().x;
 		},
 		
 		height: function(value){
@@ -585,7 +589,7 @@ var MooToolsCompat = (function(window){
     });
     
     Slick.definePseudo('visible', function() {
-        return (this.getStyle('visibility') != 'hidden' && this.isVisible() && this.isDisplayed());
+        return (this.getStyle('visibility') != 'hidden');
 	});
 
     return MooToolsCompat.$;
