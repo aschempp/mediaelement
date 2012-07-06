@@ -87,7 +87,39 @@ You can use this as a standalone library if you wish, or just stick with the ful
 * playlist builder
 * Ogg/Theora playback
 
-*2.7.0 (dev)*
+*2.9.1 (2012/06/01)*
+
+* Fixed Firefox 10+ Fullscreen error
+
+*2.9.0 (2012/05/31)*
+
+* Fixed pointer-events detection in IE9 (when using Flash mode or YouTube)
+* YouTube now shows annotations (using YouTube player rather than chromeless)
+* Fix play/pause when clicking on video when overlays are displayed [markomarkovic]
+* Dont listen to mouse events when there's not a reason to [neverarriving]
+* Adding CSS animated buffer to the time rail [neverarriving]
+* Fix for box-sizing: border-box from cutting off time text. [MatthewCallis]
+
+*2.8.2 (2012/05/15)*
+
+* Fixed volume slider bug when initially hidden
+* Fixed YouTube size problems in Flash mode
+
+*2.8.1 (2012/04/19)*
+
+* Flash fullscreen: video not fullsized
+* Flash fullscreen: youtube controls not working
+
+*2.8.0 (2012/04/17)*
+
+* Revamped YouTube to work using the Flash shim so that it supports fullscreen
+* Fix for `remove()` method (lennym)
+* Fix possible issue with ContextMenu ( quangvhg)
+* Fix for stop button ( slavva97)
+* Type on `var` and `;` (lennym)
+* Fix for keyboard support forward and backward (myffical)
+
+*2.7.0 (2012/03/12)*
 
 * Added horizontal volume control, the new default for audio (based on work by [gavinlynch](http://github.com/gavinlynch))
 * Possible issues with &lt; IE8 centering resolved
