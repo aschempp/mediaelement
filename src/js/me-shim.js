@@ -96,6 +96,8 @@ mejs.MediaElementDefaults = {
 	pluginPath: mejs.Utility.getScriptPath(['mediaelement.js','mediaelement.min.js','mediaelement-and-player.js','mediaelement-and-player.min.js']),
 	// name of flash file
 	flashName: 'flashmediaelement.swf',
+	// streamer for RTMP streaming
+	flashStreamer: '',
 	// turns on the smoothing filter in Flash
 	enablePluginSmoothing: false,
 	// name of silverlight file
@@ -362,19 +364,22 @@ mejs.HtmlMediaElementShim = {
 	},
 	
 	getTypeFromExtension: function(ext) {
-		var ext_types = {
-			'mp4': ['mp4','m4v'],
-			'ogg': ['ogg','ogv','oga'],
-			'webm': ['webm','webmv','webma']
-		};
-		var r = ext;
-		$.each(ext_types, function(key, value) {
-			if (value.indexOf(ext) > -1) {
-				r = key;
-				return;
-			}
-		});
-		return r;
+		
+		switch (ext) {
+			case 'mp4':
+			case 'm4v':
+				return 'mp4';
+			case 'webm':
+			case 'webma':
+			case 'webmv':	
+				return 'webm';
+			case 'ogg':
+			case 'oga':
+			case 'ogv':	
+				return 'ogg';
+			default:
+				return ext;
+		}
 	},
 
 	createErrorMessage: function(playback, options, poster) {
@@ -470,6 +475,7 @@ mejs.HtmlMediaElementShim = {
 			'width=' + width,
 			'startvolume=' + options.startVolume,
 			'timerrate=' + options.timerRate,
+			'flashstreamer=' + options.flashStreamer,
 			'height=' + height];
 
 		if (playback.url !== null) {
