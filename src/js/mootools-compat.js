@@ -286,6 +286,13 @@ var MooToolsCompat = (function(window){
             return this;
         },
         
+        toggleClass: function(className){
+            for (var i = 0; i < this.length; i++){
+                this[i].toggleClass(className);
+            }
+            return this;
+        },
+        
         insertBefore: function(element){
         	for (var i = 0; i < this.length; i++){
                 this[i].inject(element[0], 'before');
