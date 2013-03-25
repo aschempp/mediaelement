@@ -392,6 +392,10 @@
 			this.bind('mouseleave', fn2);
 		},
 		
+		mouseover: function(fn) {
+    		this.bind('mouseover', fn);
+		},
+
 		each: function(fn){
 			for (var i = 0; i < this.length; i++){
 				fn.call(this[i], i, this[i]);
