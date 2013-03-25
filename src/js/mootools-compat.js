@@ -229,9 +229,7 @@
          * Add a callback for when the document is ready.
          */
         ready: function(callback){
-            for (var i = 0; i < this.length; i++){
                 window.addEvent('domready', callback);
-            }
         },
 
         /**
