@@ -435,14 +435,11 @@
 			}
 
 			// fix numeric string
-			if (value > 0)
-			{
-				value = value.toInt() == value ? value+'px' : value;
+			value = value.toInt() == value ? value+'px' : value;
 
-				for (var i = 0; i < this.length; i++){
-	                this[i].setStyle('width', value);
-	            }
-	        }
+			for (var i = 0; i < this.length; i++){
+                this[i].setStyle('width', value);
+            }
 
 			return this;
 		},
