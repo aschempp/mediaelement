@@ -104,9 +104,9 @@
             if (typeof htmlString === 'undefined') {
                 return this[0].get('html');
             } else {
-            for (var i = 0; i < this.length; i++){
-                this[i].set('html', htmlString);
-            }
+                for (var i = 0; i < this.length; i++){
+                    this[i].set('html', htmlString);
+                }
             }
             return this;
         },
@@ -229,7 +229,7 @@
          * Add a callback for when the document is ready.
          */
         ready: function(callback){
-                window.addEvent('domready', callback);
+            window.addEvent('domready', callback);
         },
 
         /**
@@ -257,47 +257,47 @@
             }
             return this;
         },
-        
-        
+
+
         data: function(name){
             return this.get(name);
         },
-        
+
         removeAttr: function(propertyName){
         	for (var i = 0; i < this.length; i++){
                 this[i].removeProperty(propertyName);
             }
             return this;
         },
-        
+
         addClass: function(className){
         	for (var i = 0; i < this.length; i++){
                 this[i].addClass(className);
             }
             return this;
         },
-        
+
         removeClass: function(className){
         	for (var i = 0; i < this.length; i++){
                 this[i].removeClass(className);
             }
             return this;
         },
-        
+
         toggleClass: function(className){
             for (var i = 0; i < this.length; i++){
                 this[i].toggleClass(className);
             }
             return this;
         },
-        
+
         insertBefore: function(element){
         	for (var i = 0; i < this.length; i++){
                 this[i].inject(element[0], 'before');
             }
             return this;
         },
-        
+
         /**
          * Find all elements that match a given selector which are descendants of the
          * elements selected the MooToolsAdapter.
@@ -314,7 +314,7 @@
             }
 			return new MooToolsAdapter(elements);
         },
-		
+
 		children: function(selector){
 			var elements = [];
 			for (var i = 0; i < this.length; i++){
@@ -322,7 +322,7 @@
             }
 			return new MooToolsAdapter(elements);
 		},
-		
+
 		closest: function(selector){
 			for (var i = 0; i < this.length; i++){
                 var c = this[i].getParent(selector);
@@ -331,7 +331,7 @@
             }
 			return new MooToolsAdapter([]);
 		},
-		
+
 		siblings: function(selector){
 			var elements = [];
 			for (var i = 0; i < this.length; i++){
@@ -339,7 +339,7 @@
             }
 			return new MooToolsAdapter(elements);
 		},
-		
+
 		append: function(content){
 			if (content.length){
 				for (var i = 0; i < this.length; i++){
@@ -347,51 +347,51 @@
 				}
 				return this;
 			}
-			
+
 			for (var i = 0; i < this.length; i++){
 				this[i].adopt((i==0 ? content : content.clone()));
             }
-            
+
             return this;
 		},
-		
+
 		clone: function(){
 			var elements = [];
-			for (var i = 0; i < this.length; i++){
+            for (var i = 0; i < this.length; i++){
 				elements.append(Array.from(this[i].clone()));
             }
-            
+
             return new MooToolsAdapter(elements);
 		},
-		
+
 		remove: function(){
 			for (var i = 0; i < this.length; i++){
 				this[i].destroy();
 				delete this[i];
             }
-            
+
             this.length = 0;
-            
+
             return this;
 		},
-		
+
 		keydown: function(fn){
 			return this.bind('keydown', fn);
 		},
-		
+
 		click: function(fn){
 			return this.bind('click', fn);
 		},
-		
+
 		resize: function(fn){
 			return this.bind('resize', fn);
 		},
-		
+
 		hover: function(fn1, fn2){
 			this.bind('mouseenter', fn1);
 			this.bind('mouseleave', fn2);
 		},
-		
+
 		mouseover: function(fn) {
     		this.bind('mouseover', fn);
 		},
@@ -402,14 +402,14 @@
             }
             return this;
 		},
-		
+
 		is: function(selector){
 			for (var i = 0; i < this.length; i++){
 				if (this[i].match(selector)) return true;
             }
             return false;
 		},
-		
+
 		css: function(property, value){
 			if (typeof property == 'object'){
 				for (var i = 0; i < this.length; i++){
@@ -417,11 +417,11 @@
 	            }
 				return this;
 			}
-			
+
 			if (typeof value == 'undefined'){
 				return this[0].getStyle(property);
 			}
-			
+
 			for (var i = 0; i < this.length; i++){
                 this[i].setStyle(property, value);
             }
@@ -433,73 +433,73 @@
 				// DOMWindow does not support getComputedSize
 				return this[0].getComputedSize ? this[0].getComputedSize().width : this[0].getSize().x;
 			}
-			
+
 			// fix numeric string
 			if (value > 0)
 			{
 				value = value.toInt() == value ? value+'px' : value;
-				
+
 				for (var i = 0; i < this.length; i++){
 	                this[i].setStyle('width', value);
 	            }
 	        }
-	        
+
 			return this;
 		},
-		
+
 		outerWidth: function(includeMargin){
 			return (includeMargin && this[0].getComputedSize) ? this[0].getComputedSize({styles:['padding','border','margin']}).totalWidth : this[0].getSize().x;
 		},
-		
+
 		height: function(value){
 			if (typeof value == 'undefined'){
 				// DOMWindow does not support getComputedSize
 				return this[0].getComputedSize ? this[0].getComputedSize().height : this[0].getSize().y;
 			}
-			
+
 			// fix numeric string
 			value = value.toInt() == value ? value+'px' : value;
-			
+
 			for (var i = 0; i < this.length; i++){
                 this[i].setStyle('height', value);
             }
 			return this;
 		},
-		
+
 		offset: function(){
 			var pos = this[0].getPosition();
 			return {top: pos.y, left: pos.x};
 		},
-		
+
 		position: function(){
 			var pos = this[0].getPosition(this[0].getOffsetParent());
 			return {top: pos.y, left: pos.x};
 		},
-		
+
 		stop: function(clearQueue, jumpToEnd){
 			for (var i = 0; i < this.length; i++){
                 var tween = this[i].get('tween').cancel();
-                
+
                 if (clearQueue){
                 	tween.clearChain();
                 }
-                
+
                 if (jumpToEnd){
                 	if (tween.property) tween.set(tween.property, tween.to);
                 }
             }
 			return this;
 		},
-		
+
 		fadeOut: function(){
 			for (var i = 0; i < this.length; i++){
 				if (arguments.length > 0){
 					this[i].set('tween', {duration:arguments[0]});
-					
+
 					if (arguments[1]){
 						var t = this[i],
 							fn = arguments[1];
-							
+
 						t.get('tween').chain(function(){ fn.call(t); this.callChain() });
 					}
 				}
@@ -507,23 +507,23 @@
 			}
 			return this;
 		},
-		
+
 		fadeIn: function(){
 			for (var i = 0; i < this.length; i++){
 				if (arguments.length > 0){
 					this[i].set('tween', {duration:arguments[0]});
-					
+
 					if (arguments[1]){
 						var t = this[i],
 							fn = arguments[1];
-							
+
 						t.get('tween').chain(function(){ fn.call(t); this.callChain() });
 					}
 				}
 				this[i].fade('in');
 			}
 			return this;
-		}
+        }
     });
 
     /**
@@ -587,7 +587,7 @@
 
         new Request(parameters).send();
     };
-    
+
     /*
      * $.extend
      *
@@ -597,12 +597,12 @@
     	var i = 1;
     	if (typeof arguments[0] == 'boolean')
     		i=2;
-    	
+
     	var target = arguments[i-1];
     	for (; i < arguments.length; i++){
             Object.append(target, arguments[i]);
         }
-        
+
     	return target;
     }
 
@@ -615,12 +615,12 @@
     		new MooToolsAdapter(this).children(selector);
     	}
     });
-    
+
     Slick.definePseudo('visible', function() {
         return (this.getStyle('visibility') != 'hidden');
 	});
 
 	window.$ = jQuery;
-	
+
 })(window);
 
