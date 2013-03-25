@@ -22,7 +22,7 @@
  * This file provides a basic jQuery to MooTools Adapter. It allows us to run Backbone.js
  * with minimal modifications.
  */
-var MooToolsCompat = (function(window){
+(function(window){
     var MooToolsAdapter = new Class({
         initialize: function(elements){
             for (var i = 0; i < elements.length; i++){
@@ -300,6 +300,15 @@ var MooToolsCompat = (function(window){
             return this;
         },
         
+        /**
+         * Find all elements that match a given selector which are descendants of the
+         * elements selected the MooToolsAdapter.
+         *
+         * @param selector:String - A css3 selector;
+         *
+         * @return MooToolsAdapter A MooToolsAdapter containing the selected
+         *     elements.
+         */
         find: function(selector){
         	var elements = [];
 			for (var i = 0; i < this.length; i++){
@@ -518,20 +527,20 @@ var MooToolsCompat = (function(window){
     /**
      * JQuery Selector Methods
      *
-     * $(html) - Returns an HTML element wrapped in a MooToolsAdapter.
-     * $(expression) - Returns a MooToolsAdapter containing an element set corresponding the
+     * jQuery(html) - Returns an HTML element wrapped in a MooToolsAdapter.
+     * jQuery(expression) - Returns a MooToolsAdapter containing an element set corresponding the
      *     elements selected by the expression.
-     * $(expression, context) - Returns a MooToolsAdapter containing an element set corresponding
+     * jQuery(expression, context) - Returns a MooToolsAdapter containing an element set corresponding
      *     to applying the expression in the specified context.
-     * $(element) - Wraps the provided element in a MooToolsAdapter and returns it.
+     * jQuery(element) - Wraps the provided element in a MooToolsAdapter and returns it.
      *
      * @return MooToolsAdapter an adapter element containing the selected/constructed
      *     elements.
      */
-    MooToolsCompat.$ = function(expression, context){
+    window.jQuery = function(expression, context){
         var elements;
 
-        // Handle $(html).
+        // Handle jQuery(html).
         if (typeof expression === 'string' && !context){
             if (expression.charAt(0) === '<' && expression.charAt(expression.length - 1) === '>'){
                 elements = [new Element('div', {
@@ -541,26 +550,26 @@ var MooToolsCompat = (function(window){
             }
         } else if (typeof expression == 'object'){
             if (instanceOf(expression, MooToolsAdapter)){
-                // Handle $(MooToolsAdapter)
+                // Handle jQuery(MooToolsAdapter)
                 return expression;
             } else {
-                // Handle $(element).
+                // Handle jQuery(element).
                 return new MooToolsAdapter([expression]);
             }
         }
 
-        // Handle $(expression) and $(expression, context).
+        // Handle jQuery(expression) and jQuery(expression, context).
         context = context || document;
         elements = [context.id(expression)] || context.getElements(expression);
         return new MooToolsAdapter(elements);
     };
 
     /*
-     * $.ajax
+     * jQuery.ajax
      *
      * Maps a jQuery ajax request to a MooTools Request and sends it.
      */
-    MooToolsCompat.$.ajax = function(params){
+    window.jQuery.ajax = function(params){
         var parameters = {
             url: params.url,
             method: params.type,
@@ -581,7 +590,7 @@ var MooToolsCompat = (function(window){
      *
      * Merge the contents of two or more objects together into the first object.
      */
-    MooToolsCompat.$.extend = function(){
+    window.jQuery.extend = function(){
     	var i = 1;
     	if (typeof arguments[0] == 'boolean')
     		i=2;
@@ -604,6 +613,7 @@ var MooToolsCompat = (function(window){
         return (this.getStyle('visibility') != 'hidden');
 	});
 
-    return MooToolsCompat.$;
-});
+	window.$ = jQuery;
+	
+})(window);
 
