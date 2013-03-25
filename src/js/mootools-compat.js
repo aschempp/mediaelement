@@ -218,16 +218,6 @@
         },
 
          /**
-          * Removes from the DOM all the elements selected by the MooToolsAdapter.
-          */
-        remove: function(){
-            for (var i = 0; i < this.length; i++){
-                this[i].dispose();
-            }
-            return this;
-        },
-
-        /**
          * Add a callback for when the document is ready.
          */
         ready: function(callback){
