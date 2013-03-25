@@ -540,17 +540,14 @@
      *     elements.
      */
     window.jQuery = function(expression, context){
-        var elements;
-
         MooToolsAdapter.implement(jQuery.fn);
 
         // Handle jQuery(html).
         if (typeof expression === 'string' && !context){
             if (expression.charAt(0) === '<' && expression.charAt(expression.length - 1) === '>'){
-                elements = [new Element('div', {
+                return new MooToolsAdapter([new Element('div', {
                     html: expression
-                }).getFirst()];
-                return new MooToolsAdapter(elements);
+                }).getFirst()]);
             }
         } else if (typeof expression == 'object'){
             if (instanceOf(expression, MooToolsAdapter)){
@@ -564,8 +561,8 @@
 
         // Handle jQuery(expression) and jQuery(expression, context).
         context = context || document;
-        elements = [context.id(expression)] || context.getElements(expression);
-        return new MooToolsAdapter(elements);
+
+        return new MooToolsAdapter(context.id(expression) && [context.id(expression)] || context.getElements(expression));
     };
 
     window.jQuery.fn = {};
