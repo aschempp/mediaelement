@@ -540,6 +540,8 @@
     window.jQuery = function(expression, context){
         var elements;
 
+        MooToolsAdapter.implement(jQuery.fn);
+
         // Handle jQuery(html).
         if (typeof expression === 'string' && !context){
             if (expression.charAt(0) === '<' && expression.charAt(expression.length - 1) === '>'){
@@ -563,6 +565,8 @@
         elements = [context.id(expression)] || context.getElements(expression);
         return new MooToolsAdapter(elements);
     };
+
+    window.jQuery.fn = {};
 
     /*
      * jQuery.ajax
