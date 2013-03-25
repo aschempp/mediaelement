@@ -607,6 +607,10 @@
     	return target;
     }
 
+    window.jQuery.each = function(elements, callback) {
+        return window.jQuery(elements).each(callback);
+    }
+
 	Array.implement({
     	children: function(selector){
     		new MooToolsAdapter(this).children(selector);
