@@ -16,11 +16,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * 
+ * Extended by Andreas Schempp to support all mediaelement.js functions.
+ * @author Andreas Schempp <andreas.schempp@terminal42.ch>
  */
 
 /*
- * This file provides a basic jQuery to MooTools Adapter. It allows us to run Backbone.js
- * with minimal modifications.
+ * This file provides a basic jQuery to MooTools Adapter.
  */
 (function(window){
     var MooToolsAdapter = new Class({
@@ -258,11 +260,28 @@
             return this;
         },
 
-
+        /**
+         * Read arbitrary data associated with the matched elements
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @param name:A string naming the piece of data to read
+         * 
+         * @return The stored data
+         */
         data: function(name){
             return this.get(name);
         },
 
+        /**
+         * Remove an attribute from each element in the set of matched elements
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @param propertyName:The attribute to remove
+         * 
+         * @return MooToolsAdapter
+         */
         removeAttr: function(propertyName){
         	for (var i = 0; i < this.length; i++){
                 this[i].removeProperty(propertyName);
@@ -270,6 +289,15 @@
             return this;
         },
 
+        /**
+         * Adds the specified class(es) to each of the set of matched elements
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @param className:One or more class names to be added
+         * 
+         * @return MooToolsAdapter
+         */
         addClass: function(className){
         	for (var i = 0; i < this.length; i++){
                 this[i].addClass(className);
@@ -277,6 +305,16 @@
             return this;
         },
 
+        /**
+         * Remove a single class, multiple classes, or all classes from each
+         * element in the set of matched elements
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @param className:One or more space-separated classes to be removed
+         * 
+         * @return MooToolsAdapter
+         */
         removeClass: function(className){
         	for (var i = 0; i < this.length; i++){
                 this[i].removeClass(className);
@@ -291,6 +329,15 @@
             return this;
         },
 
+        /**
+         * nsert every element in the set of matched elements before the target
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @param element:A selector, element, HTML string, or jQuery object
+         * 
+         * @return MooToolsAdapter
+         */
         insertBefore: function(element){
         	for (var i = 0; i < this.length; i++){
                 this[i].inject(element[0], 'before');
@@ -303,6 +350,7 @@
          * elements selected the MooToolsAdapter.
          *
          * @param selector:String - A css3 selector;
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
          *
          * @return MooToolsAdapter A MooToolsAdapter containing the selected
          *     elements.
@@ -315,6 +363,16 @@
 			return new MooToolsAdapter(elements);
         },
 
+        /**
+         * Get the children of each element in a set of matched elements,
+         * optionally filtered by a selector
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @param selector:A string containing a selector expression
+         * 
+         * @return MooToolsAdapter
+         */
 		children: function(selector){
 			var elements = [];
 			for (var i = 0; i < this.length; i++){
@@ -323,6 +381,16 @@
 			return new MooToolsAdapter(elements);
 		},
 
+        /**
+         * Get the first element that matches the selector, beginning at the
+         * current element and progressing up through the DOM tree
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @param selector:A string containing a selector expression
+         * 
+         * @return MooToolsAdapter
+         */
 		closest: function(selector){
 			for (var i = 0; i < this.length; i++){
                 var c = this[i].getParent(selector);
@@ -332,6 +400,16 @@
 			return new MooToolsAdapter([]);
 		},
 
+        /**
+         * Get the siblings of each element in the set of matched elements,
+         * optionally filtered by a selector
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @param selector:A string containing a selector expression
+         * 
+         * @return MooToolsAdapter
+         */
 		siblings: function(selector){
 			var elements = [];
 			for (var i = 0; i < this.length; i++){
@@ -340,6 +418,16 @@
 			return new MooToolsAdapter(elements);
 		},
 
+        /**
+         * Insert content, specified by the parameter, to the end of each
+         * element in the set of matched elements
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @param content:DOM element, HTML string, or jQuery object to insert
+         * 
+         * @return MooToolsAdapter
+         */
 		append: function(content){
 			if (content.length){
 				for (var i = 0; i < this.length; i++){
@@ -355,6 +443,13 @@
             return this;
 		},
 
+        /**
+         * Create a deep copy of the set of matched elements
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @return MooToolsAdapter
+         */
 		clone: function(){
 			var elements = [];
             for (var i = 0; i < this.length; i++){
@@ -364,6 +459,13 @@
             return new MooToolsAdapter(elements);
 		},
 
+        /**
+         * Remove the set of matched elements from the DOM
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @return MooToolsAdapter
+         */
 		remove: function(){
 			for (var i = 0; i < this.length; i++){
 				this[i].destroy();
@@ -375,18 +477,59 @@
             return this;
 		},
 
+        /**
+         * Bind an event handler to the "keydown" JavaScript event, or trigger
+         * that event on an element
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @param fn:A function to execute each time the event is triggered
+         * 
+         * @return MooToolsAdapter
+         */
 		keydown: function(fn){
 			return this.bind('keydown', fn);
 		},
 
+        /**
+         * Bind an event handler to the "click" JavaScript event, or trigger
+         * that event on an element
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @param fn:A function to execute each time the event is triggered
+         * 
+         * @return MooToolsAdapter
+         */
 		click: function(fn){
 			return this.bind('click', fn);
 		},
 
+        /**
+         * Bind an event handler to the "resize" JavaScript event, or trigger
+         * that event on an element
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @param fn:A function to execute each time the event is triggered
+         * 
+         * @return MooToolsAdapter
+         */
 		resize: function(fn){
 			return this.bind('resize', fn);
 		},
 
+        /**
+         * Bind two handlers to the matched elements, to be executed when the
+         * mouse pointer enters and leaves the elements
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @param fn1:A function to execute when the mouse pointer enters the element
+         * @param fn2:A function to execute when the mouse pointer leaves the element
+         * 
+         * @return MooToolsAdapter
+         */
 		hover: function(fn1, fn2){
 			this.bind('mouseenter', fn1);
 			this.bind('mouseleave', fn2);
@@ -396,6 +539,15 @@
     		this.bind('mouseover', fn);
 		},
 
+        /**
+         * Iterate over a jQuery object, executing a function for each matched element
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @param fn:A function to execute for each matched element
+         * 
+         * @return MooToolsAdapter
+         */
 		each: function(fn){
 			for (var i = 0; i < this.length; i++){
 				fn.call(this[i], i, this[i]);
@@ -403,6 +555,17 @@
             return this;
 		},
 
+        /**
+         * Check the current matched set of elements against a selector,
+         * element, or jQuery object and return true if at least one of these
+         * elements matches the given arguments
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @param selector:A string containing a selector expression
+         * 
+         * @return MooToolsAdapter
+         */
 		is: function(selector){
 			for (var i = 0; i < this.length; i++){
 				if (this[i].match(selector)) return true;
@@ -410,6 +573,17 @@
             return false;
 		},
 
+        /**
+         * Get the value of a style property for the first element in the set
+         * of matched elements
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @param property:The CSS property
+         * @param value:The CSS property value
+         * 
+         * @return MooToolsAdapter
+         */
 		css: function(property, value){
 			if (typeof property == 'object'){
 				for (var i = 0; i < this.length; i++){
@@ -428,6 +602,15 @@
 			return this;
 		},
 
+        /**
+         * Set the CSS width of each element in the set of matched elements
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @param value:An integer representing the number of pixels
+         * 
+         * @return MooToolsAdapter
+         */
         width: function(value){
 			if (typeof value == 'undefined'){
 				// DOMWindow does not support getComputedSize
@@ -444,10 +627,29 @@
 			return this;
 		},
 
+        /**
+         * Get the current computed width for the first element in the set of
+         * matched elements, including padding and border
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @param includeMargin:A Boolean indicating whether to include the element's margin
+         * 
+         * @return The outerWidth in pixels
+         */
 		outerWidth: function(includeMargin){
 			return (includeMargin && this[0].getComputedSize) ? this[0].getComputedSize({styles:['padding','border','margin']}).totalWidth : this[0].getSize().x;
 		},
 
+        /**
+         * Set the CSS height of each element in the set of matched elements
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @param value:An integer representing the number of pixels
+         * 
+         * @return MooToolsAdapter
+         */
 		height: function(value){
 			if (typeof value == 'undefined'){
 				// DOMWindow does not support getComputedSize
@@ -463,16 +665,42 @@
 			return this;
 		},
 
+        /**
+         * Get the current coordinates of the first element in the set of
+         * matched elements, relative to the document
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @return An object containing the properties top and left
+         */
 		offset: function(){
 			var pos = this[0].getPosition();
 			return {top: pos.y, left: pos.x};
 		},
 
+        /**
+         * Get the current coordinates of the first element in the set of
+         * matched elements, relative to the offset parent
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @return An object containing the properties top and left
+         */
 		position: function(){
 			var pos = this[0].getPosition(this[0].getOffsetParent());
 			return {top: pos.y, left: pos.x};
 		},
 
+        /**
+         * Stop the currently-running animation on the matched elements
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @param clearQueue:A Boolean indicating whether to remove queued animation
+         * @param jumpToEnd:A Boolean indicating whether to complete the current animation immediately
+         * 
+         * @return MooToolsAdapter
+         */
 		stop: function(clearQueue, jumpToEnd){
 			for (var i = 0; i < this.length; i++){
                 var tween = this[i].get('tween').cancel();
@@ -488,6 +716,13 @@
 			return this;
 		},
 
+        /**
+         * Hide the matched elements by fading them to transparent
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @return MooToolsAdapter
+         */
 		fadeOut: function(){
 			for (var i = 0; i < this.length; i++){
 				if (arguments.length > 0){
@@ -505,6 +740,13 @@
 			return this;
 		},
 
+        /**
+         * Display the matched elements by fading them to opaque
+         * 
+         * @author Andreas Schempp <andreas.schempp@terminal42.ch>
+         * 
+         * @return MooToolsAdapter
+         */
 		fadeIn: function(){
 			for (var i = 0; i < this.length; i++){
 				if (arguments.length > 0){
